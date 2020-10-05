@@ -1,0 +1,2 @@
+rofi -i -dmenu -p "Clipboard"
+#dmenu  -fn 'RobotoMonoRegular-Regular-10' -nb '#212121' -sb '#3f51b5' -sf '#fafafa' -nf '#fafafa' -l 20 -i

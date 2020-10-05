@@ -1,0 +1,379 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+
+[colors]
+#background = #0d0d0d
+background = #212121
+background-alt = #212121
+foreground = #dfdfdf
+foreground-alt = #555
+primary = #ffb52a
+secondary = #e60053
+alert = #bd2c40
+
+[bar/i3wm]
+#separator = "|"
+monitor = ${env:MONITOR:}
+width = 100%
+height = 25
+bottom = true
+;offset-x = 1%
+;offset-y = 1%
+radius = 0
+fixed-center = false
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+;override-redirect = true 
+
+line-size = 3
+line-color = #f00
+
+border-size = 2
+border-color = #212121
+
+padding-left = 0
+padding-right = 0
+
+module-margin-left = 4
+module-margin-right = 4
+
+font-0 = DejaVu:pixelsize=10;2
+font-1 = unifont:fontformat=truetype:size=10:antialias=false;2
+font-2 = "Font Awesome 5 Brands Regular:style=Regular:size=10;2"
+font-3 = "Font Awesome 5 Free Solid:style=Solid:size=10;2"
+font-4 = "Font Awesome 5 Free Regular:style=Regular:size=10;2"
+font-5 = "MaterialIcons:style=Regular:size=10,2"
+font-6 = Weather Icons:size=10;3
+
+modules-left = i3 xkeyboard
+modules-center = 
+modules-right = fuel weather light cpu-freq filesystem-root filesystem-home wlan eth battery battery-ext battery-total pulseaudio date 
+
+tray-background = ${colors.background}
+tray-position = right
+tray-padding = 4
+
+wm-restack = i3
+
+scroll-up = i3wm-wsnext
+scroll-down = i3wm-wsprev
+
+cursor-click = pointer
+cursor-scroll = pointer 
+
+[bar/i3wm_no_light]
+inherit = bar/i3wm
+modules-right = fuel weather cpu-freq filesystem-root filesystem-home wlan eth battery battery-ext battery-total pulseaudio date 
+
+[bar/i3wm_hidpi]
+inherit = bar/i3wm
+font-0 = DejaVu:pixelsize=12;2
+font-1 = unifont:fontformat=truetype:size=12:antialias=false;2
+font-2 = "Font Awesome 5 Brands Regular:style=Regular:size=12;2"
+fontformat-3 = "Font Awesome 5 Free Solid:style=Solid:size=12;2"
+font-4 = "Font Awesome 5 Free Regular:style=Regular:size=12;2"
+font-5 = "MaterialIcons:style=Regular:size=12,2"
+font-6 = Weather Icons:size=12;3
+height = 36
+tray-padding = 0
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+
+#format-prefix = ""
+format-prefix-foreground = ${colors.foreground-alt}
+
+label-layout =  %layout%
+click-left = /etc/i3/userscripts/switchlayout.sh
+label-indicator = %name%
+label-indicator-background = ${colors.secondary}
+#label-indicator-underline = ${colors.secondary}
+
+
+[module/filesystem-base]
+type = internal/fs
+interval = 25
+
+label-unmounted = %mountpoint% not mounted
+label-unmounted-foreground = ${colors.foreground}
+
+
+[module/filesystem-home]
+inherit=module/filesystem-base
+mount-0 = /home
+label-mounted = "%{A1:pcmanfm ~ : }  %free%%{A}"
+
+[module/filesystem-root]
+inherit=module/filesystem-base
+mount-0 = /
+label-mounted =  %free% 
+
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = true
+
+; Only show workspaces on the same output as the bar
+pin-workspaces = true
+
+label-mode-padding = 2
+label-mode-foreground = #000
+label-mode-background = ${colors.primary}
+
+; focused = Active workspace on focused monitor
+label-focused = %name%
+label-focused-background = #3f51b5
+label-focused-padding = 2
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %name% %icon% 
+label-unfocused-padding = 2
+
+; visible = Active workspace on unfocused monitor
+label-visible = %name%
+label-visible-background = ${self.label-focused-background}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %name%
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 2
+
+; Separator in between workspaces
+;label-separator = |
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix-foreground = ${colors.foreground-alt}
+label = %frequency%
+
+
+[module/light]
+type = custom/script
+exec = light | cut -d '.' -f 1
+scroll-up = light -A 5
+scroll-down = light -U 5
+interval = 3
+format-prefix = " " 
+
+[module/fuel]
+type = custom/script
+exec = /etc/i3/userscripts/fuel.py
+interval = 500
+format-prefix = " "
+click-left = "python /etc/i3/userscripts/fuel.py --gmaps"
+
+[module/weather]
+type = custom/script
+label-font = 7
+click-left = "python /etc/i3/userscripts/weather.py --show"
+exec = /etc/i3/userscripts/openweathermap-simple.sh
+interval = 500
+
+[module/cpu-freq]
+type = custom/script
+exec = cpupower frequency-info  | grep "Hz" | grep "current CPU" | xargs |  cut -d ' ' -f 4-5 
+interval = 5
+format-prefix = " "
+
+[module/wlan]
+type = internal/network
+interface = wlp4s0
+interval = 3.0
+format-connected =  <ramp-signal> <label-connected>
+label-connected = "%{A1:connman-gtk --no-icon : } %essid% (%signal%%)%{A}"
+
+format-disconnected =
+;format-disconnected = <label-disconnected>
+;format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+;ltemperature abel-disconnected-foreground = ${colors.foreground-alt}
+ramp-signal-0 =
+ramp-signal-1 =
+ramp-signal-2 =
+ramp-signal-3 = 
+ramp-signal-4 =
+ramp-signal-foreground = ${colors.foreground-alt}
+
+[module/eth]
+type = internal/network
+interface = enp0s31f6
+interval = 3.0
+
+#format-connected-underline = #55aa55
+format-connected-prefix = " "
+format-connected-prefix-foreground = ${colors.foreground-alt}
+label-connected =  %local_ip%
+
+format-disconnected =
+;format-disconnected = <label-disconnected>
+;format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+;label-disconnected-foreground = ${colors.foreground-alt}
+
+[module/date]
+type = internal/date
+interval = 5
+
+#date =
+#date-alt = " %Y-%m-%d"
+
+time =  "%V    %a %d.%m.%y    %H:%M"
+#time-alt = %H:%M:%S
+
+format-prefix = 
+format-prefix-foreground = ${colors.foreground-alt}
+#format-underline = #0a6cf5
+
+label-connected = "%{A1:connman-gtk --no-icon : } %essid% (%signal%%)%{A}"
+label = "%{A1:/etc/i3/userscripts/gcal.sh : } %time%%{A}"
+
+
+[module/pulseaudio]
+type = internal/pulseaudio
+click-right = pavucontrol &
+format-volume =  <bar-volume> <label-volume>
+label-volume =  %percentage%%
+label-volume-foreground = ${root.foreground}
+
+label-muted =  %percentage%%
+label-muted-foreground = #ffff00
+
+bar-volume-width = 10
+bar-volume-foreground-0 = #55aa55
+bar-volume-foreground-1 = #55aa55
+bar-volume-foreground-2 = #55aa55
+bar-volume-foreground-3 = #55aa55
+bar-volume-foreground-4 = #55aa55
+bar-volume-foreground-5 = #f5a70a
+bar-volume-foreground-6 = #ff5555
+bar-volume-gradient = false
+bar-volume-indicator = |
+bar-volume-indicator-font = 2
+bar-volume-fill = ─
+bar-volume-fill-font = 2
+bar-volume-empty = ─
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = ${colors.foreground-alt}
+
+[module/alsa]
+type = internal/alsa
+
+format-volume = <label-volume> <bar-volume>
+label-volume = VOL
+label-volume-foreground = ${root.foreground}
+
+format-muted-prefix = " "
+format-muted-foreground = ${colors.foreground-alt}
+label-muted = sound muted
+
+bar-volume-width = 10
+bar-volume-foreground-0 = #55aa55
+bar-volume-foreground-1 = #55aa55
+bar-volume-foreground-2 = #55aa55
+bar-volume-foreground-3 = #55aa55
+bar-volume-foreground-4 = #55aa55
+bar-volume-foreground-5 = #f5a70a
+bar-volume-foreground-6 = #ff5555
+bar-volume-gradient = false
+bar-volume-indicator = |
+bar-volume-indicator-font = 2
+bar-volume-fill = ─
+bar-volume-fill-font = 2
+bar-volume-empty = ─
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = ${colors.foreground-alt}
+
+[module/battery-base]
+type = internal/battery
+adapter = AC
+time-format = %H:%M
+
+format-charging = <animation-charging> <label-charging>
+format-charging-underline = 
+
+label-discharging = %percentage%% (%time%)
+format-discharging-underline = ${self.format-charging-underline}
+
+format-full-prefix = " "
+format-full-prefix-foreground = ${colors.foreground-alt}
+format-full-underline = ${self.format-charging-underline}
+
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+#animation-charging-foreground = ${colors.foreground-alt}
+animation-charging-framerate = 750
+
+animation-discharging-0 = 
+animation-discharging-1 = 
+animation-discharging-2 = 
+animation-discharging-foreground = ${colors.foreground-alt}
+animation-discharging-framerate = 750
+
+
+[module/battery-ext]
+inherit=module/battery-base
+battery = BAT1
+format-discharging = bat1 <ramp-capacity> <label-discharging>
+format-charging = bat1  <label-charging>
+
+[module/battery]
+inherit=module/battery-base
+battery = BAT0
+format-discharging = bat0 <ramp-capacity> <label-discharging>
+format-charging = bat0  <label-charging>
+
+[module/battery-total]
+type = custom/script
+exec =  echo `grep POWER_SUPPLY_CAPACITY= ~/.batt_uevent | cut -d '=' -f 2 | cut -d '.' -f 1`%
+interval = 5
+format-prefix = " total " 
+
+
+#format-padding = 1
+#format-background = #000000
+#format-foreground = #ffffff
+
+[settings]
+screenchange-reload = true
+;compositing-background = xor
+;compositing-background = screen
+;compositing-foreground = source
+;compositing-border = over
+;pseudo-transparency = false
+
+[global/wm]
+margin-top = 0
+margin-bottom = 0
+
+; vim:ft=dosini

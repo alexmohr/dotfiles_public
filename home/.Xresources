@@ -1,0 +1,31 @@
+! XTerm material color scheme
+
+*foreground:      #dadada
+*background:      #212121
+*cursorColor:     #ffc400
+*highlightColor:  #3F51B5
+
+
+*color0:          #000000
+*color1:          #dd191d
+*color2:          #0a8f08
+*color3:          #afb42b
+*color4:          #4e6cef
+*color5:          #d81b60
+*color6:          #00acc1
+*color7:          #868686
+*color8:          #121212
+*color9:          #e84e40
+*color10:         #2baf2b
+*color11:         #d4e157
+*color12:         #738ffe
+*color13:         #ec407a
+*color14:         #26c6da
+*color15:         #dadada
+
+*renderFont: true
+*faceName: "RobotoMonoRegular"
+*faceSize: 10
+*utf8: on
+Xft.hintstyle: hintfull
+Xcursor.size: 32

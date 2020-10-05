@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Dependencies: imagemagick, i3lock-color-git, scrot
+
+killall dmenu
+
+
+TEXT="Type password to unlock"
+
+# get path where the script is located
+# its used for the lock icon
+pushd `dirname $0` > /dev/null
+SCRIPTPATH=`pwd`
+popd > /dev/null
+
+
+IMAGE=/tmp/lockscreen.png
+
+# l10n support
+case $LANG in
+    fr_* ) TEXT="Entrez votre mot de passe" ;; # Français
+    es_* ) TEXT="Ingrese su contraseña" ;; # Española
+    pl_* ) TEXT="Podaj hasło" ;; # Polish
+esac
+
+
+# try to use a forked version of i3lock with prepared parameters
+i3lock $PARAM -i $IMAGE > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    # We have failed, lets get back to stock one
+    i3lock -i $IMAGE
+fi
+
+

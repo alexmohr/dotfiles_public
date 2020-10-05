@@ -1,0 +1,122 @@
+# For the benefit of emacs users: -*- shell-script -*-
+###########################
+# xbindkeys configuration #
+###########################
+#
+# Version: 1.8.6
+#
+# If you edit this file, do not forget to uncomment any lines
+# that you change.
+# The pound(#) symbol may be used anywhere for comments.
+#
+# To specify a key, you can use 'xbindkeys --key' or
+# 'xbindkeys --multikey' and put one of the two lines in this file.
+#
+# The format of a command line is:
+#    "command to start"
+#       associated key
+#
+#
+# A list of keys is in /usr/include/X11/keysym.h and in
+# /usr/include/X11/keysymdef.h
+# The XK_ is not needed.
+#
+# List of modifier:
+#   Release, Control, Shift, Mod1 (Alt), M..8 (NumLock),
+#   Mod3 (CapsLock), Mod4, Mod5 (Scroll).
+#
+
+# The release modifier is not a standard X modifier, but you can
+# use it if you want to catch release events instead of press events
+
+# By defaults, xbindkeys does not pay attention with the modifiers
+# NumLock, CapsLock and ScrollLock.
+# Uncomment the lines above if you want to pay attention to them.
+
+#keystate_numlock = enable
+#keystate_capslock = enable
+#keystate_scrolllock= enable
+
+# Examples of commands:
+
+"xbindkeys_show" 
+control+shift + q
+
+"xdotool key super+p"
+XF86Display
+
+# Increase volume
+"for i in {0..8}; do pactl set-sink-mute $i false ; pactl set-sink-volume $i +5%;done"
+XF86AudioRaiseVolume
+
+"for i in {0..8}; do pactl set-sink-mute $i false ; pactl set-sink-volume $i +5%;done"
+Mod4+Prior
+
+# Lower volume
+"for i in {0..8}; do pactl set-sink-mute $i false ; pactl -- set-sink-volume $i -5%;done"
+XF86AudioLowerVolume
+
+"for i in {0..8}; do pactl set-sink-mute $i false ; pactl -- set-sink-volume $i -5%;done"
+Mod4+Next
+
+# Mute audio out
+"for i in {0..8}; do pactl set-sink-mute $i toggle;done"
+XF86AudioMute
+
+"for i in {0..8}; do pactl set-sink-mute $i toggle;done"
+Mod4+Home
+
+"for i in {0..8}; do pactl set-source-mute $i toggle;done"
+XF86AudioMicMute
+
+#Toggle Audio in
+"amixer set Capture toggle"
+Mod4+Insert
+
+"light -A 2 && light -O"
+XF86MonBrightnessUp
+
+"light -U 2 && light -O"
+XF86MonBrightnessDown
+
+# xkill
+"xkill"
+Mod4+End
+
+# make a screenshot with selection
+"scrot -s"
+Mod4+Print
+
+
+"if [ `rfkill list wlan | grep Soft | cut -d ':' -f 2 | xargs echo` = 'no' ]; then   notify-send -u normal 'Wifi turned ON'; else  notify-send -u normal 'Wifi turned OFF'; fi"
+XF86WLAN
+
+
+"if [ `rfkill list bluetooth | grep Soft | head -n 1 | cut -d ':' -f 2 | xargs echo` = 'no' ]; then   notify-send -u normal 'Bluetooth turned ON'; else  notify-send -u normal 'Bluetooth turned OFF'; fi"
+XF86Bluetooth
+
+
+# toggle touchpad
+"if [ `synclient -l | grep -c 'TouchpadOff.*=.*0'` = 1  ]; then notify-send -u normal  'Touchpad turned OFF'; else notify-send -u normal  'Touchpad turned ON'; fi; synclient TouchpadOff=$(synclient -l | grep -c 'TouchpadOff.*=.*0')"
+XF86Tools
+
+
+
+#"xterm -geom 50x20+20+20"
+#   Shift+Mod2+alt + s
+#
+## set directly keycode (here control+alt+mod2 + f with my keyboard)
+#"xterm"
+#  alt + c:0x29 + m:4 + mod2
+#
+## control+Shift+a  release event starts rxvt
+#"rxvt"
+#  release+control+shift + a
+#
+## Control + mouse button 2 release event starts rxvt
+#"rxvt"
+#  Control + b:2 + Release
+#
+##################################
+# End of xbindkeys configuration #
+##################################

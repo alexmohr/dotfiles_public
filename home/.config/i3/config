@@ -1,0 +1,328 @@
+# It will not be overwritten, so edit it as you like.
+#
+# Should you change your keyboard layout some time, delete
+# this file and re-run i3-config-wizard(1).
+#
+
+# i3 config file (v4)
+#
+# Please see http://i3wm.org/docs/userguide.html for a complete reference!
+
+# Keys
+#    Mod1 (usually aka "Alt" or "Meta")
+#    Mod2 ("NumLock")
+#    Mod3 (unused on default QWERTY layout)
+#    Mod4 (aka "Super" or "Windows-Key")
+#    Mod5 (e.g. "Alt_Gr" on german QWERTZ layout)
+#    Shift
+#    Control
+#    Mode_Switch
+
+
+set $mod Mod4
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+#font pango:DejaVuSansMono 8 
+#ifont RobotoMonoRegular 8
+font pango:DejaVu 10
+
+
+# Before i3 v4.8, we used to recommend this one as the default:
+# font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+# The font above is very space-efficient, that is, it looks good, sharp and
+# clear in small sizes. However, its unicode glyph coverage is limited, the old
+# X core fonts rendering does not support right-to-left and this being a bitmap
+# font, it doesn’t scale on retina/hidpi displays.
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# enable back and forth switching for workspaces
+# press name key again to get back to previous workspace
+workspace_auto_back_and_forth yes
+
+# start a terminal
+bindsym $mod+Return exec i3-sensible-terminal
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# The middle button over a titlebar kills the window
+bindsym --release button2 kill
+#bindsym --release button3 kill
+
+
+# jump to urgent
+bindsym $mod+x [urgent=latest] focus
+
+## Manual management of external displays
+# Set the shortcuts and what they do
+
+# Declare here the shortcut to bring the display selection menu
+bindsym $mod+p exec --no-startup-id /etc/i3/userscripts/display.sh
+
+# Define command to toggle internal display
+bindsym $mod+Shift+p exec --no-startup-id /etc/i3/userscripts/toggleDisplay.sh eDP1
+
+# Toggle external display
+bindsym $mod+Shift+Control+p exec --no-startup-id /etc/i3/userscripts/toggleDisplay.sh DP2-2
+
+# Activate screen saver now
+bindsym $mod+Control+p exec xset s activate
+
+# start rofi 
+bindsym $mod+d exec --no-startup-id rofi -modi drun -show
+
+# switch keyboard layout
+bindsym $mod+Shift+k exec /etc/i3/userscripts/switchlayout.sh
+
+bindsym $mod+i exec /etc/i3/userscripts/info.sh
+
+
+# change focus
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+a move left
+bindsym $mod+Shift+s move down
+bindsym $mod+Shift+w move up
+bindsym $mod+Shift+d move right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+h split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+bindsym $mod+Shift+F floating enable; resize set 590 px 333 px; sticky enable; move window to position 1329 px 718 px
+bindsym $mod+Shift+Control+F floating enable; resize set 590 px 333 px; sticky enable; move window to position 3250 px 723 px
+popup_during_fullscreen smart
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# focus the child container
+#bindsym $mod+d focus child
+
+# create named workspace
+bindsym $mod+Tab exec /etc/i3/userscripts/workspace.sh
+
+# move to new workspace
+bindsym Mod1+Tab exec python /etc/i3/userscripts/window_to_new_workspace.py
+
+# switch to workspace
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+bindsym $mod+0 workspace number 10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+bindsym $mod+Shift+0 move container to workspace number 10
+
+# move focused window between monitors
+bindsym $mod+Control+Shift+Right move container to output right
+bindsym $mod+Control+Shift+Left move container to output left
+bindsym $mod+Control+Shift+Down move workspace to output right
+bindsym $mod+Control+Shift+Up  move workspace to output left
+
+# run window switcher GOTO 
+bindsym $mod+g exec rofi -show window
+bindsym $mod+c exec clipmenu 
+
+# lock workspace
+bindsym $mod+l  exec /etc/i3/userscripts/i3lock-fancy/lock
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+Control+r exec ~/.config/polybar/launch.sh
+
+# custom exit script with dmenu
+bindsym $mod+Shift+e exec /etc/i3/userscripts/exit.sh
+
+# Prevent control q from beeing relayed to firefox
+bindsym Control+q exec /etc/i3/userscripts/noctrlq.sh
+
+# toggle borders
+bindsym $mod+b border pixel
+bindsym $mod+Shift+b border normal
+bindsym $mod+Control+b exec i3-msg bar mode toggle
+
+
+#default_border pixel
+hide_edge_borders smart
+
+# Scratchpad
+## Make the currently focused window a scratchpad
+bindsym $mod+shift+Mod1+space move scratchpad
+
+# Show the first scratchpad window
+bindsym $mod+Mod1+space scratchpad show
+
+
+# battery script
+bindsym $mod+t exec bash -c "source /etc/i3/userscripts/tlp.sh && tlpMainMenu"
+
+bindsym $mod+m exec bash -c "source /etc/i3/userscripts/volume.sh && showVolumeMenu"
+bindsym $mod+Shift+m exec pavucontrol
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+    # These bindings trigger as soon as you enter the resize mode
+    set $growth 1
+
+    # Pressing left will shrink the window’s width.
+    # Pressing right will grow the window’s width.
+    # Pressing up will shrink the window’s height.
+    # Pressing down will grow the window’s height.
+    bindsym j resize shrink width $growth px or $growth ppt
+		bindsym k resize grow height $growth px or $growth ppt
+		bindsym l resize shrink height $growth px or $growth ppt
+		bindsym semicolon resize grow width $growth px or $growth ppt
+
+    # same bindings, but for the arrow keys
+		bindsym Left resize shrink width $growth px or $growth ppt
+		bindsym Down resize grow height $growth px or $growth ppt
+		bindsym Up resize shrink height $growth px or $growth ppt
+		bindsym Right resize grow width $growth px or $growth ppt
+
+# back to normal: Enter or Escape
+		bindsym Return mode "default"
+		bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+# Window colors
+#1793d0
+#5294e2
+client.focused              #3f51b5 #3f51b5 #EEEEEE #3f51b5
+client.focused_inactive     #121212 #424242 #868686 #212121
+client.unfocused            #121212 #424242 #868686 #212121
+client.urgent               #e00032 #e00032 #EEEEEE #e00032
+
+#
+# Bar
+# 
+bar {
+    i3bar_command $HOME/.config/polybar/launch.sh
+}
+
+#
+# custom window actions / rules
+#
+for_window [class="nextcloud"] floating enable 
+for_window [class="^jetbrains-.+"][window_type=dialog] focus
+for_window [class="^jetbrains-.+"] floating disable
+for_window [title="Microsoft Teams Notification"] floating enable
+for_window [class="microsoft teams.+"] border pixel 1
+for_window [class="firefox"] border pixel 2
+for_window [title="BC floating"] floating enable
+
+#no_focus [title=".*"]
+
+#for_window [class="^jetbrains-.+"][window_type=dialog] floating disable
+assign [class="Steam"] 10
+
+
+
+#
+# Autostart
+#
+
+
+# disable internal monitor if docked an lid is closed
+exec echo nonsense `tail -1 /proc/acpi/button/lid/LID/state` | cut -d " " -f 3 | xargs  /etc/acpi/actions/lid.sh
+
+# sets display dpi 
+exec /etc/i3/userscripts/dpi.sh
+
+# mute volume as default and restart pulseaudio if it does not work properly
+exec /etc/i3/userscripts/pulse.sh
+
+# run clipmenud service because it does not work properly via systemd 
+exec clipmenud
+
+# start wicd tray icon 
+exec connman-gtk --tray
+
+# configure x autolock
+# exec --no-startup-id xautolock -time 5 -locker "/etc/i3/userscripts/i3lock-fancy/lock" 
+
+#
+# Keyboard 
+#
+exec xbindkeys
+
+# us keyboard
+exec setxkbmap us
+exec setxkbmap -option compose:ralt
+
+# notifcation
+exec dunst
+
+# script to show both batteries
+exec /etc/i3/userscripts/batt.sh
+
+# restore last brightnes
+exec light -I
+
+# enable wifi when no cable connected
+exec /etc/i3/userscripts/wifi.sh enp0s31f6
+
+# disable bluetooth
+#exec sudo rfkill block bluetooth
+
+# start libinput gestures
+exec libinput-gestures-setup start
+
+# bluetooth icon
+exec blueman-applet
+
+# hides mouse cursor when not used
+exec unclutter
+
+# set wallpaper
+exec /etc/i3/userscripts/set_wallpaper.sh
+
+
