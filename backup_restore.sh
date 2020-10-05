@@ -29,23 +29,26 @@ etcFiles=(
 /etc/libinput-gestures.conf
 /etc/i3/
 /etc/acpi/
+)
+
+systemdFiles=(
 /etc/systemd/system/battery_status.timer
 /etc/systemd/system/battery_status.service
 )
 
 dotConfig=(
-~/.config/wallpaper-reddit/
+~/.config/settings.ini
+~/.config/mimeapps.list  
 ~/.config/i3
 ~/.config/dunst
-~/.config/settings.ini
-~/.config/mimeapps.list
 ~/.config/gtk-3.0/
 ~/.config/sxiv/
 ~/.config/rofi/
 ~/.config/polybar
+~/.config/wallpaper-reddit
 )
 
-dotLocal=(
+dotLocalApps=(
  ~/.local/share/applications/bc.desktop
 )
 
@@ -61,15 +64,10 @@ function list_packages(){
 }
 
 function restore(){
-    for file in `ls -a home`
-    do
-        if [ "$file" != "." ] && [ "$file" != ".." ]; then
-        	cp -r home/$file ~
-		fi
-    done
     sudo cp -r ./etc/* /etc/
     sudo cp -r ./usr/* /usr/
-  
+
+    cp -rT ./home $HOME
     cp -r home/.SpaceVim.d/ ~/
     echo "Install SpaceVim via curl -sLf https://spacevim.org/install.sh | bash"
 
@@ -87,20 +85,28 @@ function backup(){
         cp -r -p "$file" ./home/
     done
 
+    mkdir -p  home/.config/
     for file in "${dotConfig[@]}"
     do
-        cp -r -p "$file" ./home/.config/
+      cp -r -p "$file" ./home/.config/
     done
 
-    for file in "${dotLocal[@]}"
+    mkdir -p home/.local/share/applications
+    for file in "${dotLocalApps[@]}"
     do
-        cp -r -p "$file" ./home/.local/
+        cp -r -p "$file" ./home/.local/share/applications
     done
 
 
     for file in "${etcFiles[@]}"
     do
         cp -r -p "$file" ./etc/
+    done
+
+    mkdir -p etc/systemd/system/
+    for file in "${systemdFiles[@]}"
+    do
+        cp -r -p "$file" ./etc/systemd/system
     done
 
     for file in "${usrBinFiles[@]}"

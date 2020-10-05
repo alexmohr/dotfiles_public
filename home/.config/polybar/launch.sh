@@ -24,6 +24,20 @@ if ((  $max_x > 1920 )); then
   CFG=i3wm_hidpi
 fi
 
+
+BATTERY="battery"
+if [ -f /sys/class/power_supply/BAT0 ]; then
+  export BATTERY="$BATTERY battery-ext battery-total"
+fi
+
+LIGHT=""
+if command -v COMMAND &> /dev/null; then
+  LIGHT="light"
+fi
+
+
+export MODULES="fuel weather $LIGHT cpu-freq filesystem-root filesystem-home wlan eth $BATTERY pulseaudio date"
+
 # Terminate already running bar instances
 kill_polybar
 

@@ -64,7 +64,7 @@ font-6 = Weather Icons:size=10;3
 
 modules-left = i3 xkeyboard
 modules-center = 
-modules-right = fuel weather light cpu-freq filesystem-root filesystem-home wlan eth battery battery-ext battery-total pulseaudio date 
+modules-right = ${env:MODULES} 
 
 tray-background = ${colors.background}
 tray-position = right
@@ -77,10 +77,6 @@ scroll-down = i3wm-wsprev
 
 cursor-click = pointer
 cursor-scroll = pointer 
-
-[bar/i3wm_no_light]
-inherit = bar/i3wm
-modules-right = fuel weather cpu-freq filesystem-root filesystem-home wlan eth battery battery-ext battery-total pulseaudio date 
 
 [bar/i3wm_hidpi]
 inherit = bar/i3wm

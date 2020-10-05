@@ -1,8 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Basic calculator
-Exec=/usr/bin/uxterm -T "BC floating" -e "/usr/bin/bc -l -q"
-Comment=Calculator
-Categories=Development;IDE;
-Terminal=false

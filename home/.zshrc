@@ -51,10 +51,13 @@ ZSH_THEME="ys"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git thefuck docker cp last-working-dir)
+plugins=(git docker cp last-working-dir)
 
 source $ZSH/oh-my-zsh.sh
 source /etc/profile
+source ~/.zsh_bash_common_rc
+[ -f ~/.zsh_bash_common_rc ] && source ~/.zsh_bash_common_rc
+
 
 # User configuration
 
@@ -84,28 +87,23 @@ source /etc/profile
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-eval $(thefuck --alias)
 
 zstyle ':completion:*' special-dirs true
 
-export EDITOR=vim
 
-alias fox='firefox'
-alias fu='fuck'
-alias ch='chromium'
-alias vpn='sudo openvpn --writepid /var/run/openvpn.pid --config'
-alias libre='libreoffice'
-alias untar='tar -xzf'
-alias mktgz='tar -czvf'
-alias bc='bc -l'
-alias sido='sudo'
-alias proton='STEAM_COMPAT_DATA_PATH=~/.steam/steam/steamapps/common/Proton\ 4.11/proton run'
-alias docker='sudo docker'
-alias fix_history=/etc/i3/userscripts/fix_zsh_history.sh
-alias sudo='sudo '
-alias cpv='cpv --progress'
-alias mem='/etc/i3/userscripts/memory.sh'
-alias open='nohup xdg-open'
-alias svg_to_pdf='for file in *.svg; do; new_name=`echo $file | sed 's/svg/pdf/g'`;  rsvg-convert -f pdf -o $new_name $file;done'
-alias git_push_new_branch='`git push 2>&1 > /dev/null | grep git | xargs`'
-alias make='make -j 4'
+
+if is_running_in_container; then
+PROMPT="
+%{$terminfo[bold]$fg[blue]%}#%{$reset_color%} \
+%(#,%{$bg[yellow]%}%{$fg[black]%}%n%{$reset_color%},%{$fg[cyan]%}%n) \
+%{$fg[white]%}@ \
+%{$fg[blue]%}DOCKER \
+%{$fg[white]%}in \
+%{$terminfo[bold]$fg[yellow]%}%~%{$reset_color%}\
+${hg_info}\
+${git_info}\
+ \
+%{$fg[white]%}[%*] $exit_code
+%{$terminfo[bold]$fg[red]%}$ %{$reset_color%}"
+fi
+

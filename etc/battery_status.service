@@ -1,6 +1,0 @@
-[Unit]
-Description=Checks the battery and charging state and puts the system into hibernate if power is low.
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/battery_status.sh
