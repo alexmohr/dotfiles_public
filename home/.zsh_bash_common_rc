@@ -38,6 +38,7 @@ alias ddb='docker run --rm -it --user `id -u` -v /run/user/`id -u`:/run/user/`id
 alias ddz='docker run --rm -it --user `id -u` -v /run/user/`id -u`:/run/user/`id -u` -e USER=$USER -e HOME=$HOME -e DISPLAY=$DISPLAY -h $HOSTNAME -v /home/`whoami`:/home/`whoami` -v /tmp:/tmp --workdir `pwd` mbient-yocto-with-x11-mohalex /bin/zsh'
 
 if is_running_in_container; then
+  echo a > /dev/null
 else 
   alias fu='fuck'
   eval $(thefuck --alias)
