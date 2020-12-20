@@ -3,10 +3,22 @@
 
 # includes
 source "/etc/i3/userscripts/util.sh"
+MAX_SINKS=10
 
 function getActiveSinkProfile {
     echo `pactl list sinks | grep profile.description` | cut -d "=" -f 2 | cut -d "\"" -f 2
 }
+
+
+function getSources {
+    SOURCES=$(pactl list sources | grep "Source #"  | cut -d '#' -f 2)
+}
+
+
+function getSinks {
+    SINKS=$(pactl list sinks | grep "Sink #"  | cut -d '#' -f 2)
+}
+
 
 function getSinkSelect { 
     x="Select Profile"
@@ -38,12 +50,71 @@ function setSinkProfile {
     done <<< "$outputs"
 }
 
+function muteSources {
+    while read -r i; do
+       pactl set-source-mute $i true
+    done <<< $SOURCES
+}
+
+function muteSinks {
+    getSinks
+    while read -r i; do
+       pactl set-sink-mute $i true
+    done <<< $SINKS
+}
+
+function toggleMuteSources {
+    getSources
+    while read -r i; do
+      pactl set-source-mute $i toggle
+    done <<< $SOURCES
+}
+
+function toggleMuteSinks {
+    getSinks
+    while read -r i; do
+       pactl set-sink-mute $i toggle
+    done <<< $SINKS
+}
+
+function lowerVolume {
+    getSinks
+    while read -r i; do
+       pactl set-sink-mute $i false
+       pactl -- set-sink-volume $i -5%
+    done <<< $SINKS
+}
+
+
+function raiseVolume {
+    getSinks
+    while read -r i; do
+       pactl set-sink-mute $i false
+       pactl -- set-sink-volume $i +5%
+    done <<< $SINKS
+}
+
+
+
 function setVolume {
     result=`echo -e "" | $dmenu "Enter new volume"`
-    for i in {0..50}; do 
-        pactl set-sink-mute $i false
-        pactl set-sink-volume $i $result%;
-    done
+    getSinks
+    while read -r i; do
+      pactl set-sink-mute $i false
+      pactl set-sink-volume $i $result%; 
+    done <<< $SINKS   
+}
+
+function getDefaultSourceVolume {
+  PAC=$(pacmd list-sources |  grep "\*.*index" -A 40)
+  MUTED=$(echo "$PAC"  | grep mute |  cut -d : -f 2 | xargs)
+  VOLUME=$(echo "$PAC" | grep "volume:" | grep -v base  | cut -d % -f 1 | cut -d / -f 2 | xargs  )
+  if [[ "$MUTED" == "yes" ]]; then 
+    echo "%{F#ffff00}" 
+  else
+    echo " $VOLUME%"
+  fi
+
 }
 
 function getVolume {

@@ -46,24 +46,24 @@ control+shift + q
 XF86Display
 
 # Increase volume
-"for i in {0..8}; do pactl set-sink-mute $i false ; pactl set-sink-volume $i +5%;done"
+"bash -c 'source /etc/i3/userscripts/volume.sh; raiseVolume'"
 XF86AudioRaiseVolume
 
-"for i in {0..8}; do pactl set-sink-mute $i false ; pactl set-sink-volume $i +5%;done"
+"bash -c 'source /etc/i3/userscripts/volume.sh; raiseVolume'"
 Mod4+Prior
 
 # Lower volume
-"for i in {0..8}; do pactl set-sink-mute $i false ; pactl -- set-sink-volume $i -5%;done"
+"bash -c 'source /etc/i3/userscripts/volume.sh; lowerVolume'"
 XF86AudioLowerVolume
 
-"for i in {0..8}; do pactl set-sink-mute $i false ; pactl -- set-sink-volume $i -5%;done"
+"bash -c 'source /etc/i3/userscripts/volume.sh; lowerVolume'"
 Mod4+Next
 
 # Mute audio out
-"for i in {0..8}; do pactl set-sink-mute $i toggle;done"
+"bash -c 'source /etc/i3/userscripts/volume.sh; toggleMuteSinks'"
 XF86AudioMute
 
-"for i in {0..8}; do pactl set-sink-mute $i toggle;done"
+"bash -c 'source /etc/i3/userscripts/volume.sh; toggleMuteSinks'"
 Mod4+Home
 
 "for i in {0..8}; do pactl set-source-mute $i toggle;done"

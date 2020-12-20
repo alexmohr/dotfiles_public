@@ -29,3 +29,4 @@
 *utf8: on
 Xft.hintstyle: hintfull
 Xcursor.size: 32
+Xft.dpi: 120

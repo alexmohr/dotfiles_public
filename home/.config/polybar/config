@@ -56,10 +56,10 @@ module-margin-right = 4
 
 font-0 = DejaVu:pixelsize=10;2
 font-1 = unifont:fontformat=truetype:size=10:antialias=false;2
-font-2 = "Font Awesome 5 Brands Regular:style=Regular:size=10;2"
-font-3 = "Font Awesome 5 Free Solid:style=Solid:size=10;2"
-font-4 = "Font Awesome 5 Free Regular:style=Regular:size=10;2"
-font-5 = "MaterialIcons:style=Regular:size=10,2"
+font-2 = "Font Awesome 5 Brands Regular:style=Regular:size=10;0"
+font-3 = "Font Awesome 5 Free Solid:style=Solid:size=10;0"
+font-4 = "Font Awesome 5 Free Regular:style=Regular:size=10;0"
+font-5 = "MaterialIcons:style=Regular:size=10,0"
 font-6 = Weather Icons:size=10;3
 
 modules-left = i3 xkeyboard
@@ -161,7 +161,7 @@ label-urgent-padding = 2
 type = internal/cpu
 interval = 2
 format-prefix-foreground = ${colors.foreground-alt}
-label = %frequency%
+label = %percentage%% 
 
 
 [module/light]
@@ -188,17 +188,19 @@ interval = 500
 
 [module/cpu-freq]
 type = custom/script
-exec = cpupower frequency-info  | grep "Hz" | grep "current CPU" | xargs |  cut -d ' ' -f 4-5 
-interval = 5
+# requires ssystat package
+exec = echo $(mpstat 1 4 | awk 'END  { printf("%.0f%\n", 100-$NF); }') @ $(cpupower frequency-info  | grep "Hz" | grep "current CPU" | xargs |  cut -d ' ' -f 4-5) 
+interval = 1
 format-prefix = " "
+
 
 [module/wlan]
 type = internal/network
-interface = wlp4s0
+interface =  ${env:WLAN}
 interval = 3.0
 format-connected =  <ramp-signal> <label-connected>
-label-connected = "%{A1:connman-gtk --no-icon : } %essid% (%signal%%)%{A}"
-
+label-connected = "%{A1:connman-gtk --no-icon : }%essid% (%signal%%)%{A}    %downspeed:2%   %upspeed:2%" 
+click-left = nm-connection-editor
 format-disconnected =
 ;format-disconnected = <label-disconnected>
 ;format-disconnected-underline = ${self.format-connected-underline}
@@ -213,13 +215,13 @@ ramp-signal-foreground = ${colors.foreground-alt}
 
 [module/eth]
 type = internal/network
-interface = enp0s31f6
+interface =  ${env:LAN:}
 interval = 3.0
 
 #format-connected-underline = #55aa55
 format-connected-prefix = " "
 format-connected-prefix-foreground = ${colors.foreground-alt}
-label-connected =  %local_ip%
+label-connected =  ""%local_ip%     %downspeed:2%   %upspeed:2%"
 
 format-disconnected =
 ;format-disconnected = <label-disconnected>
@@ -244,6 +246,12 @@ format-prefix-foreground = ${colors.foreground-alt}
 label-connected = "%{A1:connman-gtk --no-icon : } %essid% (%signal%%)%{A}"
 label = "%{A1:/etc/i3/userscripts/gcal.sh : } %time%%{A}"
 
+[module/microphone]
+type = custom/script 
+click-right = pavucontrol &
+click-left = bash -c "source /etc/i3/userscripts/volume.sh && toggleMuteSources"
+exec = bash -c "source /etc/i3/userscripts/volume.sh && getDefaultSourceVolume"
+interval = 1
 
 [module/pulseaudio]
 type = internal/pulseaudio
@@ -356,9 +364,11 @@ interval = 5
 format-prefix = " total " 
 
 
-#format-padding = 1
-#format-background = #000000
-#format-foreground = #ffffff
+[module/vpn]
+type = custom/script
+exec = "/etc/i3/userscripts/polybar_vpn.sh --state"
+interval = 1
+click-left = "/etc/i3/userscripts/polybar_vpn.sh --toggle"
 
 [settings]
 screenchange-reload = true

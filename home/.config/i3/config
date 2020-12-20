@@ -192,13 +192,32 @@ bindsym $mod+Control+b exec i3-msg bar mode toggle
 #default_border pixel
 hide_edge_borders smart
 
-# Scratchpad
-## Make the currently focused window a scratchpad
+#
+# Scratchpad rules
+#
+
+# Make the currently focused window a scratchpad
 bindsym $mod+shift+Mod1+space move scratchpad
 
 # Show the first scratchpad window
 bindsym $mod+Mod1+space scratchpad show
 
+# Rocket chat rules
+bindsym $mod+Mod1+r [class="Rocket.Chat"] scratchpad show
+for_window [class="Rocket.Chat"] move scratchpad
+
+# Evolution rules
+bindsym $mod+Mod1+e [class="Evolution"] scratchpad show
+#for_window [class="Evolution"] move scratchpad
+
+# Teams rules
+bindsym $mod+Mod1+t [class="Teams"] scratchpad show
+#for_window [class="Teams"] move scratchpad
+
+
+
+
+###
 
 # battery script
 bindsym $mod+t exec bash -c "source /etc/i3/userscripts/tlp.sh && tlpMainMenu"
@@ -252,23 +271,29 @@ bar {
 # custom window actions / rules
 #
 for_window [class="nextcloud"] floating enable 
-for_window [class="^jetbrains-.+"][window_type=dialog] focus
+#for_window [class="^jetbrains-.+"][window_type=dialog] focus
 for_window [class="^jetbrains-.+"] floating disable
+for_window [title="Go to Line/Column"] floating enable
 for_window [title="Microsoft Teams Notification"] floating enable
 for_window [class="microsoft teams.+"] border pixel 1
 for_window [class="firefox"] border pixel 2
 for_window [title="BC floating"] floating enable
+#for_window [class="Xfce4-panel"] border pixel 100 
 
-#no_focus [title=".*"]
+# disable auto focus for jetbrains tools
+no_focus [title="^jetbrains-.+"]
 
-#for_window [class="^jetbrains-.+"][window_type=dialog] floating disable
+# Workspace assignments
 assign [class="Steam"] 10
+assign [class="Teams.+"] "10: Teams"
+assign [class="Evolution"] "8: Mail"
 
 
 
 #
 # Autostart
 #
+exec /etc/i3/userscripts/pulse.sh
 
 
 # disable internal monitor if docked an lid is closed
@@ -277,8 +302,13 @@ exec echo nonsense `tail -1 /proc/acpi/button/lid/LID/state` | cut -d " " -f 3 |
 # sets display dpi 
 exec /etc/i3/userscripts/dpi.sh
 
-# mute volume as default and restart pulseaudio if it does not work properly
-exec /etc/i3/userscripts/pulse.sh
+# mute sinks and sources
+exec bash -c "source /etc/i3/userscripts/volume.sh && muteSinks"
+exec bash -c "source /etc/i3/userscripts/volume.sh && muteSources"
+
+# set default sink
+exec pacmd list-sinks | grep alsa_output.pci-0000_21_00.1.hdmi-stereo -B 1 | grep index | cut -d : -f 2 | xargs pacmd set-default-sink 
+
 
 # run clipmenud service because it does not work properly via systemd 
 exec clipmenud
@@ -296,7 +326,7 @@ exec xbindkeys
 
 # us keyboard
 exec setxkbmap us
-exec setxkbmap -option compose:ralt
+#exec setxkbmap -option compose:ralt
 
 # notifcation
 exec dunst
@@ -324,5 +354,10 @@ exec unclutter
 
 # set wallpaper
 exec /etc/i3/userscripts/set_wallpaper.sh
+
+exec xrdb ~/.Xresources
+exec xfce4-panel --disable-wm-check
+exec  xrandr --output DP-1 --right-of DP-2
+exec gsettings set org.gnome.desktop.a11y.mouse secondary-click-time 0.01
 
 

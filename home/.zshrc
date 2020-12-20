@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/home/me/.oh-my-zsh
+export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -53,8 +53,8 @@ ZSH_THEME="ys"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git docker cp last-working-dir)
 
-source $ZSH/oh-my-zsh.sh
 source /etc/profile
+source $ZSH/oh-my-zsh.sh
 source ~/.zsh_bash_common_rc
 [ -f ~/.zsh_bash_common_rc ] && source ~/.zsh_bash_common_rc
 
@@ -94,16 +94,34 @@ zstyle ':completion:*' special-dirs true
 
 if is_running_in_container; then
 PROMPT="
+%{$fg[white]%}[%*] \
 %{$terminfo[bold]$fg[blue]%}#%{$reset_color%} \
 %(#,%{$bg[yellow]%}%{$fg[black]%}%n%{$reset_color%},%{$fg[cyan]%}%n) \
 %{$fg[white]%}@ \
-%{$fg[blue]%}DOCKER \
+%{$fg[blue]%} DOCKER \
 %{$fg[white]%}in \
 %{$terminfo[bold]$fg[yellow]%}%~%{$reset_color%}\
 ${hg_info}\
 ${git_info}\
  \
-%{$fg[white]%}[%*] $exit_code
+$exit_code
 %{$terminfo[bold]$fg[red]%}$ %{$reset_color%}"
+else
+PROMPT="
+%{$fg[white]%}[%*] \
+%{$terminfo[bold]$fg[blue]%}#%{$reset_color%} \
+%(#,%{$bg[yellow]%}%{$fg[black]%}%n%{$reset_color%},%{$fg[cyan]%}%n) \
+%{$fg[white]%}@ \
+%{$fg[green]%}%m \
+%{$fg[white]%}in \
+%{$terminfo[bold]$fg[yellow]%}%~%{$reset_color%}\
+${hg_info}\
+${git_info}\
+ \
+$exit_code
+%{$terminfo[bold]$fg[red]%}$ %{$reset_color%}"
+
+
 fi
+
 

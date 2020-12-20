@@ -1,4 +1,4 @@
-#!/bin/python
+#!/bin/python3
 # -*- coding: utf-8 -*-
 # Get some information about the weather at our location
 
@@ -37,7 +37,7 @@ country_code = location['countryCode']
 BASE_URL = "https://creativecommons.tankerkoenig.de/json/list.php"
 # LAT=48.3515503
 # LONG=9.9666895
-API_KEY = "KEY"
+API_KEY = ""
 FUEL = "diesel"
 SORT = "price"
 RADIUS = "10"

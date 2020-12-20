@@ -32,7 +32,7 @@ city=location['city']
 country_code=location['countryCode']
 
 # build the url for the weather
-weather_api_key = "KEY"
+weather_api_key = "appid="
 weather_unit = "units=metric"
 weather_url = "http://api.openweathermap.org/data/2.5/weather?q=" + urllib.parse.quote(city) + "," + country_code + "&" + weather_api_key + "&" + weather_unit
 

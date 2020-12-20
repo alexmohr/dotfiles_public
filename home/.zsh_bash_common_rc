@@ -8,12 +8,16 @@ is_running_in_container() {
 
 export EDITOR=vim
 export HOSTNAME=$HOST
-export PATH=$PATH:$HOME/clion-2020.2.3/bin
+export PATH=$PATH:$HOME/tools/clion/bin
+export PATH=$PATH:$HOME/tools/
+export QNX_HOST=$HOME/qnx700/host/linux/x86_64/
 
+export QNX_TARGET_ROOT=$HOME/qnx700/target/qnx7
 
 
 alias diff='diff --color=auto'
 alias ls='ls --color=auto'
+alias mttf='~/tools/mttf/mttf-client'
 
 alias fox='firefox'
 alias ch='chromium'
@@ -32,10 +36,24 @@ alias mem='/etc/i3/userscripts/memory.sh'
 alias open='nohup xdg-open'
 alias svg_to_pdf='for file in *.svg; do; new_name=`echo $file | sed 's/svg/pdf/g'`;  rsvg-convert -f pdf -o $new_name $file;done'
 alias git_push_new_branch='`git push 2>&1 > /dev/null | grep git | xargs`'
-alias make='make -j $(grep cpu\ cores /proc/cpuinfo | wc -l)'
+alias make='make -j`nproc`'
 alias ssh='ssh -A'
-alias ddb='docker run --rm -it --user `id -u` -v /run/user/`id -u`:/run/user/`id -u` -e USER=$USER -e DISPLAY=$DISPLAY -h $HOSTNAME -v /home/`whoami`:/home/`whoami` -v /tmp:/tmp --workdir `pwd` mbient-yocto-with-x11 /bin/bash'
-alias ddz='docker run --rm -it --user `id -u` -v /run/user/`id -u`:/run/user/`id -u` -e USER=$USER -e HOME=$HOME -e DISPLAY=$DISPLAY -h $HOSTNAME -v /home/`whoami`:/home/`whoami` -v /tmp:/tmp --workdir `pwd` mbient-yocto-with-x11-mohalex /bin/zsh'
+alias ddb='docker run --rm -it --user $(id -u) -v /run/user/$(id -u):/run/user/$(id -u) -e USER=$USER -e HOME=$HOME -e DISPLAY=$DISPLAY -h $HOSTNAME -e DOCKER_NAME=YOCTO-DEV -v /home/`whoami`:/home/`whoami` -v /tmp:/tmp --workdir `pwd` mbient-yocto-with-x11 /bin/bash'
+alias ddz='docker run --rm -it --user $(id -u) -v /run/user/$(id -u):/run/user/$(id -u) -e USER=$USER -e HOME=$HOME -e DISPLAY=$DISPLAY -h $HOSTNAME -e DOCKER_NAME=YOCTO-DEV -v /home/`whoami`:/home/`whoami` -v /tmp:/tmp --workdir `pwd` mbient-yocto-with-x11 /bin/zsh'
+alias ddq='docker run --rm -it --user $(id -u) -v /run/user/$(id -u):/run/user/$(id -u) -e USER=$USER -e HOME=$HOME -e DISPLAY=$DISPLAY -h $HOSTNAME -e DOCKER_NAME=QNX-BUILD -v /home/`whoami`:/home/`whoami` -v /tmp:/tmp --workdir `pwd` -e LM_LICENSE_FILE=27057@sedcagse1190.emea.bg.corpintra.net  -e QNX_HOST=$QNX_HOST -e QNX_TARGET=$QNX_TARGET_ROOT -e USERNAME=$USERNAME --network host qnx-enviroment-with-x11 /bin/bash'
+alias ddy='docker run --rm -it -v /home/mohalex:/home/mohalex --workdir=`pwd` \
+-u $(id -u):$(id -g) \
+-v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) \
+-v /dev:/dev \
+-v $HOME/.config/docker/passwd:/etc/passwd \
+-v /var/run/docker.sock:/var/run/docker.sock \ 
+-e DOCKER_NAME=YOCTO-BUILD \
+--net host \
+-e HOME=$HOME \
+-e SSH_AUTH_SOCK=$SSH_AUTH_SOCK artifact.swf.daimler.com/mbient-docker/yocto-environment:latest bash'
+
+
+#alias qemu_qnx='sudo netplan apply && sleep 3  && cd $HOME/dev/loggers/qnx_qemu_images/ &&  qemu-system-x86_64 -name smoketest -net nic,macaddr=fe-cc-cc-cc-cc-05,model=e1000 -net bridge,br=br0 -drive format=qcow2,file=icc_qnx_boot.qcow2 -drive format=qcow2,file=icc_qnx_root.qcow2 -drive format=raw,file=shared.img -m 256 -nographic'
 
 if is_running_in_container; then
   echo a > /dev/null
@@ -45,11 +63,17 @@ else
 
 
   if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-    ssh-agent -t 1h > "$XDG_RUNTIME_DIR/ssh-agent.env"
+    ssh-agent  > "$XDG_RUNTIME_DIR/ssh-agent.env"
+    source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
+    ssh-add
   fi
   if [[ ! "$SSH_AUTH_SOCK" ]]; then
     source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
   fi
-
 fi
+
+if ! bat -v COMMAND &> /dev/null; then
+  alias bat='batcat'
+fi
+
 

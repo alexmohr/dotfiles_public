@@ -24,7 +24,7 @@ get_icon() {
     echo $icon
 }
 
-KEY="KEY"
+KEY=""
 CITY=""
 UNITS="metric"
 SYMBOL="°"
@@ -40,7 +40,12 @@ if [ -n "$CITY" ]; then
 
     weather=$(curl -sf "$API/weather?appid=$KEY&$CITY_PARAM&units=$UNITS")
 else
-    location=$(curl -sf https://location.services.mozilla.com/v1/geolocate?key=geoclue)
+    WEATHER_LOCATION="/tmp/weather_location"
+    if [ ! -f "$WEATHER_LOCATION" ]; then
+        location=$(curl -sf https://location.services.mozilla.com/v1/geolocate?key=geoclue)
+    else
+        location=$(cat $WEATHER_LOCATION)
+    fi
 
     if [ -n "$location" ]; then
         location_lat="$(echo "$location" | jq '.location.lat')"

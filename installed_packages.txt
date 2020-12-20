@@ -21,6 +21,7 @@ code
 connman
 connman-gtk
 cpupower
+diffstat
 docker
 dunst
 esptool
@@ -42,11 +43,12 @@ intel-ucode
 intellij-idea-ultimate-edition
 iucode-tool
 jmtpfs
-latex-tikz-er2
+libhandy0
 libinput-gestures-git
 light-git
 linux-headers
 logrotate
+lxappearance
 macchanger
 make
 man-db
@@ -62,6 +64,7 @@ otf-ipafont
 p7zip-gui
 package-query
 paper-icon-theme-git
+patch
 pavucontrol
 pdftk
 perf
@@ -73,11 +76,12 @@ proot
 python-i3ipc
 python-jsonpickle
 python-pandas
-python-plotly
 python-pylint
 python-pytest-cov
+python-sphinx
 python-wakeonlan
 python-wheel
+qt5-serialport
 qt5-styleplugins
 qtikz
 redshift
@@ -85,7 +89,9 @@ reflector
 remmina
 screen
 scrot
+signify
 spice-vdagent
+spotify-dev
 srecord
 sshfs
 steam
@@ -123,8 +129,11 @@ vim
 virt-manager
 vitetris
 vlc
+wallpaper-reddit-git
+wget
 winetricks
 wireless_tools
+wireshark-qt
 wps-office
 xautolock
 xbindkeys
@@ -141,4 +150,3 @@ xorg-xsetroot
 xournalpp
 yay
 zip
-zsh
